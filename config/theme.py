@@ -20,6 +20,10 @@ COLORS = {
     "surface": "#0D1426",
     "primary": "#4FC3F7",
     "accent": "#FFD166",
+    "btc_line": "#4FC3F7",
+    "gold_line": "#FFD166",
+    "sp500_line": "#A8FF78",
+    "correlation_line": "#A78BFA",
     "up": "#4FC3F7",
     "down": "#EF5350",
     "grid": "#111D35",
@@ -28,6 +32,13 @@ COLORS = {
     "text_hint": "#2E3F6B",
     "ma7": "#AB47BC",
     "ma30": "#F7931A",
+    "ibit": "#4FC3F7",
+    "fbtc": "#A8FF78",
+    "bitb": "#FFD166",
+    "arkb": "#A78BFA",
+    "gbtc": "#EF5350",
+    "others": "#6B84B8",
+    "cumulative": "#E8F0FF",
 }
 
 TYPOGRAPHY = {
@@ -52,6 +63,21 @@ LAYOUT = {
     "volume_axes": [0.08, 0.14, 0.62, 0.10],
     "callout_default": [0.72, 0.82],
     "pct_default": [0.72, 0.725],
+    "macro_title_x": 0.08,
+    "macro_title_y": 0.96,
+    "macro_subtitle_y": 0.885,
+    "macro_source_x": 0.08,
+    "macro_source_y": 0.02,
+    "macro_watermark_x": 0.96,
+    "macro_watermark_y": 0.02,
+    "macro_axes": [0.08, 0.15, 0.74, 0.66],
+    "macro_callout_center": [0.89, 0.72],
+    "correlation_axes": [0.08, 0.34, 0.72, 0.47],
+    "correlation_btc_axes": [0.08, 0.13, 0.72, 0.17],
+    "correlation_callout": [0.84, 0.72],
+    "etf_axes": [0.08, 0.20, 0.66, 0.58],
+    "etf_callout": [0.78, 0.80],
+    "etf_insight_box": [0.08, 0.08],
 }
 
 STYLE = {
@@ -71,6 +97,13 @@ STYLE = {
     "callout_label_gap": 0.155,
     "high_annotation_offset": (0, 12),
     "low_annotation_offset": (28, 10),
+    "etf_bar_width": 0.12,
+    "etf_bar_alpha": 0.92,
+    "etf_cumulative_line_width": 2.0,
+    "etf_cumulative_marker_size": 28,
+    "etf_zero_line_width": 1.0,
+    "etf_insight_box_alpha": 0.82,
+    "etf_insight_box_pad": 0.45,
 }
 
 AXES = {
@@ -86,8 +119,10 @@ AXES = {
     "right_padding_days": 0.5,
 }
 
+WATERMARK_HANDLE = "@koalada18"
+
 WATERMARK = {
-    "text": "@YourHandle",
+    "text": WATERMARK_HANDLE,
     "position": (LAYOUT["watermark_x"], LAYOUT["watermark_y"]),
     "ha": "right",
     "va": "bottom",
@@ -110,4 +145,22 @@ RENDERING_RULES = {
     "x_axis_padding": "Price and volume axes share xlim, with right edge padded by AXES['right_padding_days'].",
     "volume_axis": "Volume uses daily bars, no grid, fixed AXES['volume_ticks'], and billion-dollar labels.",
     "date_ticks": "Volume dates show weekly Monday ticks and skip labels near the right edge.",
+}
+
+ETF_FLOW = {
+    "featured_funds": ("IBIT", "FBTC", "BITB", "ARKB", "GBTC"),
+    "category_order": ("IBIT", "FBTC", "BITB", "ARKB", "GBTC", "Others"),
+    "colors": {
+        "IBIT": COLORS["ibit"],
+        "FBTC": COLORS["fbtc"],
+        "BITB": COLORS["bitb"],
+        "ARKB": COLORS["arkb"],
+        "GBTC": COLORS["gbtc"],
+        "Others": COLORS["others"],
+    },
+    "source": "Source: Farside Investors",
+    "flow_unit_divisor": 1_000_000,
+    "flow_unit_suffix": "M",
+    "cumulative_unit_divisor": 1_000_000,
+    "cumulative_unit_suffix": "M",
 }

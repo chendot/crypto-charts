@@ -37,13 +37,25 @@ class Annotations:
             va="top",
         )
 
-    def add_event_line(self, ax: Axes, date: pd.Timestamp, label: str) -> None:
+    def add_event_line(
+        self,
+        ax: Axes,
+        date: pd.Timestamp,
+        label: str,
+        *,
+        line_color: str | None = None,
+        line_width: float | None = None,
+        linestyle: str = "--",
+        text_color: str | None = None,
+        fontsize: float | None = None,
+        rotation: float = 0,
+    ) -> None:
         """Add a vertical event line and label on an axes."""
         ax.axvline(
             date,
-            color=theme.COLORS["accent"],
-            linewidth=theme.STYLE["event_line_width"],
-            linestyle="--",
+            color=line_color or theme.COLORS["accent"],
+            linewidth=line_width or theme.STYLE["event_line_width"],
+            linestyle=linestyle,
         )
         y_top = ax.get_ylim()[1]
         ax.annotate(
@@ -51,12 +63,13 @@ class Annotations:
             xy=(date, y_top),
             xytext=(0, -theme.STYLE["annotation_offset_points"]),
             textcoords="offset points",
-            color=theme.COLORS["accent"],
-            fontsize=theme.TYPOGRAPHY["annotation"]["size"],
+            color=text_color or theme.COLORS["accent"],
+            fontsize=fontsize or theme.TYPOGRAPHY["annotation"]["size"],
             fontweight=theme.TYPOGRAPHY["annotation"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
             ha="center",
             va="top",
+            rotation=rotation,
         )
 
     def add_pct_change(self, fig: Figure, pct: float, position: tuple[float, float]) -> None:

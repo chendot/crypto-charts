@@ -4,3 +4,6 @@ output/
 __pycache__/
 .DS_Store
 *.pyc
+data/cache/**/*.csv
+data/cache/**/*.parquet
+data/cache/**/*.json

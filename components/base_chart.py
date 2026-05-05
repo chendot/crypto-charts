@@ -8,7 +8,11 @@ from pathlib import Path
 from config import theme
 
 os.environ.setdefault("MPLCONFIGDIR", str(theme.PROJECT_ROOT / ".matplotlib-cache"))
+os.environ.setdefault("MPLBACKEND", "Agg")
 
+import matplotlib
+
+matplotlib.use("Agg", force=True)
 import matplotlib.pyplot as plt
 
 
