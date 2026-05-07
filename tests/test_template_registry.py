@@ -30,7 +30,7 @@ def test_template_modules_expose_render_contract() -> None:
 
 def test_template_placeholders_raise_not_implemented() -> None:
     """Verify placeholder templates fail explicitly until implementation is added."""
-    for config in [item for item in TEMPLATES.values() if item.template_id != "t1"]:
+    for config in [item for item in TEMPLATES.values() if item.template_id not in {"t1", "t6"}]:
         module = importlib.import_module(config.module)
         try:
             module.render(as_of="2026-01-01")

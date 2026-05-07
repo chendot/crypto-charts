@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Mapping
 
+from config import theme
+
 
 @dataclass(frozen=True)
 class TemplateText:
@@ -119,17 +121,43 @@ TEMPLATES: Mapping[str, TemplateConfig] = {
     "t6": TemplateConfig(
         template_id="t6",
         name="Narrative Sector Rotation Bump Chart",
-        frequency="TODO: weekly Wednesday",
+        frequency="weekly Wednesday",
         module="templates.t6_narrative_rotation",
         default_size=(1200, 675),
-        data_dependencies=("TODO: sector_returns",),
+        data_dependencies=("coingecko_categories_history",),
         variants=(),
         text=TemplateText(
-            title="TODO: narrative rotation title for {as_of}",
-            subtitle="TODO: sector rank subtitle",
-            source="TODO: source attribution",
+            title="{argument}",
+            subtitle="{weeks}-{unit} narrative rotation · 7-day performance ranking · {date_range}",
+            source="Source: CoinGecko  @koalada18",
         ),
-        notes="TODO: define narrative taxonomy and ranking metric.",
+        notes="Track weekly narrative rotation rankings from cached CoinGecko category snapshots.",
+        visual={
+            "category_labels": {
+                "AI & Big Data": "AI",
+                "Real World Assets": "RWA",
+                "DePIN": "DePIN",
+                "Meme": "Meme",
+                "Layer 2": "L2",
+                "Gaming": "Gaming",
+                "Liquid Staking": "LST",
+                "Decentralized Exchange": "DEX",
+                "Stablecoins": "Stable",
+                "Restaking": "Restaking",
+            },
+            "category_colors": {
+                "AI & Big Data": theme.COLORS["primary"],
+                "Real World Assets": "#A8FF78",
+                "DePIN": "#A78BFA",
+                "Meme": "#FF8A65",
+                "Layer 2": "#5EEAD4",
+                "Gaming": "#F472B6",
+                "Liquid Staking": "#FFD166",
+                "Decentralized Exchange": "#7DD3FC",
+                "Stablecoins": "#94A3B8",
+                "Restaking": "#F59E0B",
+            },
+        },
     ),
     "t7": TemplateConfig(
         template_id="t7",

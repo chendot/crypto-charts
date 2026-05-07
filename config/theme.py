@@ -20,6 +20,8 @@ COLORS = {
     "surface": "#0D1426",
     "primary": "#4FC3F7",
     "accent": "#FFD166",
+    "mint": "#00C896",
+    "rose": "#FF6B6B",
     "btc_line": "#4FC3F7",
     "gold_line": "#FFD166",
     "sp500_line": "#A8FF78",
@@ -30,6 +32,7 @@ COLORS = {
     "text_primary": "#E8F0FF",
     "text_muted": "#6B84B8",
     "text_hint": "#2E3F6B",
+    "label_muted": "#6B7280",
     "ma7": "#AB47BC",
     "ma30": "#F7931A",
     "ibit": "#4FC3F7",
@@ -78,6 +81,7 @@ LAYOUT = {
     "etf_axes": [0.08, 0.20, 0.66, 0.58],
     "etf_callout": [0.78, 0.80],
     "etf_insight_box": [0.08, 0.08],
+    "t6_axes": [0.10, 0.19, 0.68, 0.58],
 }
 
 STYLE = {
@@ -104,6 +108,9 @@ STYLE = {
     "etf_zero_line_width": 1.0,
     "etf_insight_box_alpha": 0.82,
     "etf_insight_box_pad": 0.45,
+    "bump_label_min_gap": 0.4,
+    "bump_label_offset_x": 0.34,
+    "bump_arrow_offset_x": 0.82,
 }
 
 AXES = {

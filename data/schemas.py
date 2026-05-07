@@ -46,7 +46,7 @@ FUNDING_EXTREME_SCHEMA = DataFrameSchema(
 )
 NARRATIVE_ROTATION_SCHEMA = DataFrameSchema(
     name="narrative_rotation",
-    columns=("date", "sector", "rank", "score", "return_pct"),
+    columns=("week", "category", "price_change_7d", "market_cap", "rank"),
 )
 STABLECOIN_FLOW_SCHEMA = DataFrameSchema(
     name="stablecoin_flow",
