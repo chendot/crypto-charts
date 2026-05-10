@@ -101,8 +101,8 @@ def _draw_right_labels(
     arrow_x = x_positions[latest_week] + theme.STYLE["bump_arrow_offset_x"]
     for category, y_position in zip(categories, adjusted_positions):
         is_top = int(current_positions[category]) <= highlight_top
-        base_color = category_colors.get(category, theme.COLORS["primary"])
-        label_color = base_color if is_top else theme.COLORS["label_muted"]
+        base_color = category_colors.get(category, theme.COLORS["data"]["primary"])
+        label_color = base_color if is_top else theme.COLORS["text"]["label_muted"]
         font_size = 9 if is_top else 8
         font_weight = theme.TYPOGRAPHY["title"]["weight"] if is_top else theme.TYPOGRAPHY["annotation"]["weight"]
         ax.text(
@@ -123,7 +123,7 @@ def _draw_right_labels(
                 arrow_x,
                 y_position,
                 arrow,
-                color=theme.COLORS["mint"] if arrow == "↑" else theme.COLORS["rose"],
+                color=theme.COLORS["data"]["mint"] if arrow == "↑" else theme.COLORS["data"]["rose"],
                 fontsize=font_size,
                 fontweight=theme.TYPOGRAPHY["title"]["weight"],
                 fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -136,18 +136,18 @@ def _draw_right_labels(
 def _style_axes(ax: Axes, week_count: int) -> None:
     """Apply shared Midnight Blueprint styling to the bump chart axes."""
     ax.grid(False)
-    ax.set_facecolor(theme.COLORS["background"])
+    ax.set_facecolor(theme.COLORS["base"]["background"])
     ax.set_ylim(0.5, 10.5)
     ax.invert_yaxis()
     ax.set_yticks(range(1, 11))
     ax.set_yticklabels([_ordinal(rank) for rank in range(1, 11)])
     ax.set_xticks(range(week_count))
-    ax.tick_params(axis="x", colors=theme.COLORS["text_muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"], length=0)
-    ax.tick_params(axis="y", colors=theme.COLORS["text_muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"], length=0, pad=10)
+    ax.tick_params(axis="x", colors=theme.COLORS["text"]["muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"], length=0)
+    ax.tick_params(axis="y", colors=theme.COLORS["text"]["muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"], length=0, pad=10)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_visible(False)
-    ax.spines["bottom"].set_color(theme.COLORS["grid"])
+    ax.spines["bottom"].set_color(theme.COLORS["base"]["grid"])
     ax.spines["bottom"].set_linewidth(0.8)
     ax.set_xlim(-0.15, max(week_count - 1, 0) + 1.35)
 
@@ -162,7 +162,7 @@ def _series_style(
 ) -> dict[str, object]:
     """Return line and marker styling for one category series."""
     rank = int(latest_ranks[category])
-    base_color = category_colors.get(category, theme.COLORS["primary"])
+    base_color = category_colors.get(category, theme.COLORS["data"]["primary"])
     if rank <= highlight_top:
         return {
             "line_color": base_color,
@@ -180,7 +180,7 @@ def _series_style(
             "linewidth": 1.0,
             "alpha": 0.3,
             "markersize": 3,
-            "markerfacecolor": theme.COLORS["background"],
+            "markerfacecolor": theme.COLORS["base"]["background"],
             "markeredgewidth": 0.9,
             "zorder": 2,
         }
@@ -190,7 +190,7 @@ def _series_style(
         "linewidth": 1.2,
         "alpha": 0.5,
         "markersize": 3,
-        "markerfacecolor": theme.COLORS["background"],
+        "markerfacecolor": theme.COLORS["base"]["background"],
         "markeredgewidth": 0.9,
         "zorder": 3,
     }
@@ -235,6 +235,6 @@ def _ordinal(value: int) -> str:
 def _blend_with_background(color: str, mix: float) -> str:
     """Blend a category color toward the chart background for lower emphasis."""
     base_rgb = mcolors.to_rgb(color)
-    background_rgb = mcolors.to_rgb(theme.COLORS["background"])
+    background_rgb = mcolors.to_rgb(theme.COLORS["base"]["background"])
     blended = tuple((1 - mix) * channel + mix * background for channel, background in zip(base_rgb, background_rgb))
     return mcolors.to_hex(blended)

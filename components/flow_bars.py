@@ -94,7 +94,7 @@ def _draw_cumulative_line(ax: Axes, cumulative: pd.Series, positions: np.ndarray
     ax.plot(
         positions,
         cumulative.to_numpy(),
-        color="#AABBCC",
+        color=theme.COLORS["etf"]["cumulative"],
         alpha=0.6,
         linewidth=1.2,
         linestyle="-",
@@ -115,7 +115,7 @@ def _annotate_low_point(ax: Axes, cumulative: pd.Series, positions: np.ndarray) 
         xy=(positions[low_position], low_value),
         xytext=(-14, 12),
         textcoords="offset points",
-        color="#EF5350",
+        color=theme.COLORS["etf"]["gbtc"],
         fontsize=max(theme.TYPOGRAPHY["annotation"]["size"] - 1, 7),
         fontweight=theme.TYPOGRAPHY["title"]["weight"],
         fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -130,7 +130,7 @@ def _annotate_low_point(ax: Axes, cumulative: pd.Series, positions: np.ndarray) 
         xy=(positions[final_position], final_value),
         xytext=(10, 0),
         textcoords="offset points",
-        color="#AABBCC",
+        color=theme.COLORS["etf"]["cumulative"],
         fontsize=max(theme.TYPOGRAPHY["annotation"]["size"] - 1, 7),
         fontweight=theme.TYPOGRAPHY["annotation"]["weight"],
         fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -171,7 +171,7 @@ def _draw_zero_line(ax: Axes) -> None:
     """Draw a zero baseline shared by both aligned axes."""
     ax.axhline(
         0,
-        color="#4A5568",
+        color=theme.COLORS["text"]["hint"],
         linewidth=0.5,
         zorder=1,
     )
@@ -220,14 +220,14 @@ def _expand_range_to_zero_frac(lo: float, hi: float, zero_frac: float) -> tuple[
 
 def _style_left_axis(ax: Axes) -> None:
     """Style the primary daily-flow axis."""
-    ax.tick_params(axis="y", colors="#8899AA", labelsize=theme.TYPOGRAPHY["axis"]["size"])
-    ax.tick_params(axis="x", colors="#8899AA", labelsize=theme.TYPOGRAPHY["axis"]["size"], length=0)
-    ax.grid(True, axis="y", color="#1E2433", linewidth=0.5)
+    ax.tick_params(axis="y", colors=theme.COLORS["text"]["muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"])
+    ax.tick_params(axis="x", colors=theme.COLORS["text"]["muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"], length=0)
+    ax.grid(True, axis="y", color=theme.COLORS["base"]["grid"], linewidth=0.5)
     ax.grid(False, axis="x")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#4A5568")
-    ax.spines["bottom"].set_color("#4A5568")
+    ax.spines["left"].set_color(theme.COLORS["text"]["hint"])
+    ax.spines["bottom"].set_color(theme.COLORS["text"]["hint"])
     ax.spines["left"].set_linewidth(0.5)
     ax.spines["bottom"].set_linewidth(0.5)
 
@@ -235,7 +235,7 @@ def _style_left_axis(ax: Axes) -> None:
 def _style_right_axis(ax: Axes) -> None:
     """Style the secondary cumulative-flow axis."""
     tick_size = max(theme.TYPOGRAPHY["axis"]["size"] - 1, 7)
-    ax.tick_params(axis="y", colors="#8899AA", labelsize=tick_size, length=0, pad=-32)
+    ax.tick_params(axis="y", colors=theme.COLORS["text"]["muted"], labelsize=tick_size, length=0, pad=-32)
     for label in ax.get_yticklabels():
         label.set_horizontalalignment("left")
     ax.grid(False)
@@ -262,7 +262,7 @@ def _add_legend(ax: Axes, categories: tuple[str, ...]) -> None:
     cumulative_handle = Line2D(
         [0],
         [0],
-        color="#AABBCC",
+        color=theme.COLORS["etf"]["cumulative"],
         alpha=0.6,
         linewidth=1.2,
         linestyle="-",
@@ -273,7 +273,7 @@ def _add_legend(ax: Axes, categories: tuple[str, ...]) -> None:
         labels=(*categories, "Cumulative net flow"),
         loc="upper left",
         frameon=False,
-        labelcolor="#8899AA",
+        labelcolor=theme.COLORS["text"]["muted"],
         fontsize=max(theme.TYPOGRAPHY["annotation"]["size"] - 1, 7),
         ncols=5,
         borderaxespad=0.6,

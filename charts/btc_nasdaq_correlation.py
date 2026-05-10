@@ -33,10 +33,10 @@ CORRELATION_TICKS = [-0.2, 0, 0.2, 0.4, 0.6, 0.8, 1.0]
 
 def _current_state(value: float) -> tuple[str, str]:
     if value > 0.5:
-        return "Moves Like Tech", theme.COLORS["down"]
+        return "Moves Like Tech", theme.COLORS["data"]["down"]
     if value >= 0:
-        return "Weakly Correlated", theme.COLORS["accent"]
-    return "Digital Gold Mode", theme.COLORS["primary"]
+        return "Weakly Correlated", theme.COLORS["data"]["accent"]
+    return "Digital Gold Mode", theme.COLORS["data"]["primary"]
 
 
 def _format_btc_price(value: float, _position: int) -> str:
@@ -64,7 +64,7 @@ def build_chart() -> Path:
     ax1.plot(
         df["date"],
         df["correlation"],
-        color=theme.COLORS["correlation_line"],
+        color=theme.COLORS["data"]["quaternary"],
         linewidth=2.0,
         label="90D Rolling Correlation",
         zorder=4,
@@ -74,7 +74,7 @@ def build_chart() -> Path:
         0.5,
         df["correlation"],
         where=df["correlation"] > 0.5,
-        color=theme.COLORS["down"],
+        color=theme.COLORS["data"]["down"],
         alpha=0.12,
         interpolate=True,
         linewidth=0,
@@ -84,7 +84,7 @@ def build_chart() -> Path:
         0,
         df["correlation"],
         where=(df["correlation"] >= 0) & (df["correlation"] <= 0.5),
-        color=theme.COLORS["accent"],
+        color=theme.COLORS["data"]["accent"],
         alpha=0.08,
         interpolate=True,
         linewidth=0,
@@ -94,7 +94,7 @@ def build_chart() -> Path:
         0,
         df["correlation"],
         where=df["correlation"] < 0,
-        color=theme.COLORS["primary"],
+        color=theme.COLORS["data"]["primary"],
         alpha=0.08,
         interpolate=True,
         linewidth=0,
@@ -105,14 +105,14 @@ def build_chart() -> Path:
     ax1.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     ax1.set_ylabel("")
     ax1.tick_params(axis="x", labelbottom=False)
-    ax1.axhline(0.5, color=theme.COLORS["down"], linestyle="--", linewidth=0.8)
-    ax1.axhline(0, color=theme.COLORS["text_muted"], linestyle="--", linewidth=0.6)
+    ax1.axhline(0.5, color=theme.COLORS["data"]["down"], linestyle="--", linewidth=0.8)
+    ax1.axhline(0, color=theme.COLORS["text"]["muted"], linestyle="--", linewidth=0.6)
     ax1.text(
         0.01,
         0.5,
         "High Correlation",
         transform=ax1.get_yaxis_transform(),
-        color=theme.COLORS["down"],
+        color=theme.COLORS["data"]["down"],
         fontsize=8,
         fontfamily=theme.TYPOGRAPHY["font_family"],
         ha="left",
@@ -122,7 +122,7 @@ def build_chart() -> Path:
     ax2.plot(
         df["date"],
         df["btc_price"],
-        color=theme.COLORS["primary"],
+        color=theme.COLORS["data"]["primary"],
         linewidth=1.2,
         alpha=0.7,
         zorder=3,
@@ -131,13 +131,13 @@ def build_chart() -> Path:
         df["date"],
         df["btc_price"].min(),
         df["btc_price"],
-        color=theme.COLORS["primary"],
+        color=theme.COLORS["data"]["primary"],
         alpha=0.06,
         linewidth=0,
     )
     ax2.yaxis.set_major_formatter(FuncFormatter(_format_btc_price))
     ax2.set_ylabel("")
-    ax2.grid(True, color=theme.COLORS["grid"], linewidth=theme.STYLE["grid_line_width"])
+    ax2.grid(True, color=theme.COLORS["base"]["grid"], linewidth=theme.STYLE["grid_line_width"])
 
     x_min = df["date"].min()
     x_max = df["date"].max()
@@ -156,19 +156,19 @@ def build_chart() -> Path:
             ax1,
             event_date,
             label,
-            line_color=theme.COLORS["text_hint"],
+            line_color=theme.COLORS["text"]["hint"],
             line_width=0.8,
             linestyle="--",
-            text_color=theme.COLORS["text_muted"],
+            text_color=theme.COLORS["text"]["muted"],
             fontsize=8,
         )
 
     legend = ax1.legend(
         loc="upper left",
-        facecolor=theme.COLORS["surface"],
-        edgecolor=theme.COLORS["grid"],
+        facecolor=theme.COLORS["base"]["surface"],
+        edgecolor=theme.COLORS["base"]["grid"],
         fontsize=9,
-        labelcolor=theme.COLORS["text_primary"],
+        labelcolor=theme.COLORS["text"]["primary"],
         framealpha=1.0,
     )
     for line in legend.get_lines():

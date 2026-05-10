@@ -49,13 +49,8 @@ TEMPLATES: Mapping[str, TemplateConfig] = {
         ),
         notes="Weekly five-trading-day BTC spot ETF flow structure chart.",
         visual={
-            "featured_issuers": ("IBIT", "FBTC", "GBTC"),
-            "issuer_colors": {
-                "IBIT": "#4FC3F7",
-                "FBTC": "#FFD166",
-                "GBTC": "#EF5350",
-                "Others": "#8899AA",
-            },
+            "featured_issuers": theme.ETF_FLOW["featured_funds"],
+            "issuer_colors": theme.ETF_FLOW["colors"],
         },
     ),
     "t2": TemplateConfig(
@@ -146,7 +141,7 @@ TEMPLATES: Mapping[str, TemplateConfig] = {
                 "Restaking": "Restaking",
             },
             "category_colors": {
-                "AI & Big Data": theme.COLORS["primary"],
+                "AI & Big Data": theme.COLORS["data"]["primary"],
                 "Real World Assets": "#A8FF78",
                 "DePIN": "#A78BFA",
                 "Meme": "#FF8A65",

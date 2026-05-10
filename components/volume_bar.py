@@ -16,7 +16,7 @@ class VolumeBar:
     def draw(self, ax: Axes, dates: pd.Series, volumes: pd.Series, prices: pd.Series) -> None:
         """Draw volume bars using up/down colors based on price changes."""
         changes = prices.diff().fillna(0)
-        colors = [theme.COLORS["up"] if change >= 0 else theme.COLORS["down"] for change in changes]
+        colors = [theme.COLORS["data"]["up"] if change >= 0 else theme.COLORS["data"]["down"] for change in changes]
         ax.bar(dates, volumes, color=colors, alpha=theme.STYLE["bar_alpha"], width=theme.STYLE["bar_width"])
         ax.grid(False)
         self._apply_weekly_date_ticks(ax, dates)
@@ -26,13 +26,13 @@ class VolumeBar:
         ax.yaxis.offsetText.set_visible(False)
         ax.tick_params(
             axis="y",
-            color=theme.COLORS["grid"],
+            color=theme.COLORS["base"]["grid"],
             width=theme.STYLE["volume_tick_line_width"],
         )
         ax.tick_params(
             axis="x",
             labelsize=theme.AXES["volume_date_label_size"],
-            colors=theme.COLORS["text_muted"],
+            colors=theme.COLORS["text"]["muted"],
         )
         for label in ax.get_xticklabels():
             label.set_ha("center")

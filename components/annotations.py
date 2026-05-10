@@ -18,7 +18,7 @@ class Annotations:
             position[0],
             position[1],
             value,
-            color=theme.COLORS["text_primary"],
+            color=theme.COLORS["text"]["primary"],
             fontsize=theme.TYPOGRAPHY["callout"]["size"],
             fontweight=theme.TYPOGRAPHY["callout"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -29,7 +29,7 @@ class Annotations:
             position[0],
             position[1] - theme.STYLE["callout_label_gap"],
             label,
-            color=theme.COLORS["text_muted"],
+            color=theme.COLORS["text"]["muted"],
             fontsize=theme.TYPOGRAPHY["annotation"]["size"],
             fontweight=theme.TYPOGRAPHY["annotation"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -53,7 +53,7 @@ class Annotations:
         """Add a vertical event line and label on an axes."""
         ax.axvline(
             date,
-            color=line_color or theme.COLORS["accent"],
+            color=line_color or theme.COLORS["data"]["accent"],
             linewidth=line_width or theme.STYLE["event_line_width"],
             linestyle=linestyle,
         )
@@ -63,7 +63,7 @@ class Annotations:
             xy=(date, y_top),
             xytext=(0, -theme.STYLE["annotation_offset_points"]),
             textcoords="offset points",
-            color=text_color or theme.COLORS["accent"],
+            color=text_color or theme.COLORS["data"]["accent"],
             fontsize=fontsize or theme.TYPOGRAPHY["annotation"]["size"],
             fontweight=theme.TYPOGRAPHY["annotation"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -74,7 +74,7 @@ class Annotations:
 
     def add_pct_change(self, fig: Figure, pct: float, position: tuple[float, float]) -> None:
         """Add a percentage change badge colored by direction."""
-        color = theme.COLORS["up"] if pct >= 0 else theme.COLORS["down"]
+        color = theme.COLORS["data"]["up"] if pct >= 0 else theme.COLORS["data"]["down"]
         fig.text(
             position[0],
             position[1],

@@ -99,16 +99,11 @@ def _flow_visual_config(template_config: TemplateConfig) -> dict[str, object]:
     """Return T1 flow grouping and color configuration."""
     visual_config = template_config.visual or {}
     return {
-        "featured_issuers": tuple(visual_config.get("featured_issuers", ("IBIT", "FBTC", "GBTC"))),
+        "featured_issuers": tuple(visual_config.get("featured_issuers", theme.ETF_FLOW["featured_funds"])),
         "issuer_colors": dict(
             visual_config.get(
                 "issuer_colors",
-                {
-                    "IBIT": theme.COLORS["primary"],
-                    "FBTC": theme.COLORS["accent"],
-                    "GBTC": theme.COLORS["down"],
-                    "Others": "#8899AA",
-                },
+                theme.ETF_FLOW["colors"],
             )
         ),
     }
@@ -130,7 +125,7 @@ def _add_t1_title(chart: BaseChart, title: str, subtitle: str) -> None:
         theme.LAYOUT["title_x"],
         theme.LAYOUT["title_y"],
         display_title.replace("$", r"\$"),
-        color=theme.COLORS["text_primary"],
+        color=theme.COLORS["text"]["primary"],
         fontsize=title_size,
         fontweight=theme.TYPOGRAPHY["title"]["weight"],
         fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -171,7 +166,7 @@ def _add_net_flow_callout(chart: BaseChart, total_flow: float) -> None:
         theme.WATERMARK["position"][0],
         theme.LAYOUT["etf_callout"][1],
         _format_signed_usd(total_flow),
-        color=theme.COLORS["primary"] if total_flow >= 0 else theme.COLORS["down"],
+        color=theme.COLORS["data"]["primary"] if total_flow >= 0 else theme.COLORS["data"]["down"],
         fontsize=theme.TYPOGRAPHY["callout"]["size"],
         fontweight=theme.TYPOGRAPHY["callout"]["weight"],
         fontfamily=theme.TYPOGRAPHY["font_family"],

@@ -28,15 +28,15 @@ class BaseChart:
             dpi=theme.CANVAS["dpi"],
             facecolor=theme.CANVAS["background"],
         )
-        self.fig.patch.set_facecolor(theme.COLORS["background"])
+        self.fig.patch.set_facecolor(theme.COLORS["base"]["background"])
 
     def add_axes(self, rect: list[float]) -> plt.Axes:
         """Add a themed axes at a normalized figure rectangle."""
-        ax = self.fig.add_axes(rect, facecolor=theme.COLORS["background"])
-        ax.tick_params(colors=theme.COLORS["text_muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"])
-        ax.grid(True, color=theme.COLORS["grid"], linewidth=theme.STYLE["grid_line_width"])
+        ax = self.fig.add_axes(rect, facecolor=theme.COLORS["base"]["background"])
+        ax.tick_params(colors=theme.COLORS["text"]["muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"])
+        ax.grid(True, color=theme.COLORS["base"]["grid"], linewidth=theme.STYLE["grid_line_width"])
         for spine in ax.spines.values():
-            spine.set_color(theme.COLORS["grid"])
+            spine.set_color(theme.COLORS["base"]["grid"])
             spine.set_linewidth(theme.STYLE["spine_width"])
         return ax
 
@@ -46,7 +46,7 @@ class BaseChart:
             theme.LAYOUT["title_x"],
             theme.LAYOUT["title_y"],
             title,
-            color=theme.COLORS["text_primary"],
+            color=theme.COLORS["text"]["primary"],
             fontsize=theme.TYPOGRAPHY["title"]["size"],
             fontweight=theme.TYPOGRAPHY["title"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -57,7 +57,7 @@ class BaseChart:
             theme.LAYOUT["title_x"],
             theme.LAYOUT["subtitle_y"],
             subtitle,
-            color=theme.COLORS["text_muted"],
+            color=theme.COLORS["text"]["muted"],
             fontsize=theme.TYPOGRAPHY["subtitle"]["size"],
             fontweight=theme.TYPOGRAPHY["subtitle"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -70,7 +70,7 @@ class BaseChart:
         self.fig.text(
             *theme.WATERMARK["position"],
             theme.WATERMARK["text"],
-            color=theme.COLORS["text_hint"],
+            color=theme.COLORS["text"]["hint"],
             fontsize=theme.TYPOGRAPHY["watermark"]["size"],
             fontweight=theme.TYPOGRAPHY["watermark"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
@@ -84,7 +84,7 @@ class BaseChart:
             theme.LAYOUT["source_x"],
             theme.LAYOUT["source_y"],
             source_text,
-            color=theme.COLORS["text_hint"],
+            color=theme.COLORS["text"]["hint"],
             fontsize=theme.TYPOGRAPHY["annotation"]["size"],
             fontweight=theme.TYPOGRAPHY["annotation"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],

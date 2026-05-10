@@ -17,34 +17,31 @@ HEX_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
 
 def test_required_theme_fields_exist() -> None:
-    """Verify all required top-level theme fields and color keys exist."""
+    """Verify all required top-level theme fields and nested color keys exist."""
     assert hasattr(theme, "CANVAS")
     assert hasattr(theme, "COLORS")
     assert hasattr(theme, "TYPOGRAPHY")
     assert hasattr(theme, "LAYOUT")
     assert hasattr(theme, "WATERMARK")
 
-    for key in (
-        "background",
-        "surface",
-        "primary",
-        "accent",
-        "up",
-        "down",
-        "grid",
-        "text_primary",
-        "text_muted",
-        "text_hint",
-        "ma7",
-        "ma30",
-    ):
-        assert key in theme.COLORS
+    required_color_keys = {
+        "base": ("background", "surface", "grid"),
+        "data": ("primary", "accent", "tertiary", "quaternary", "up", "down", "mint", "rose"),
+        "text": ("primary", "muted", "hint", "label_muted", "footer"),
+        "series": ("ma7", "ma30"),
+        "etf": ("ibit", "fbtc", "bitb", "arkb", "gbtc", "others", "cumulative"),
+    }
+    for group, keys in required_color_keys.items():
+        assert group in theme.COLORS
+        for key in keys:
+            assert key in theme.COLORS[group]
 
 
 def test_colors_are_valid_hex() -> None:
     """Verify all theme colors use legal six-digit hex values."""
-    for color in theme.COLORS.values():
-        assert HEX_RE.match(color)
+    for color_group in theme.COLORS.values():
+        for color in color_group.values():
+            assert HEX_RE.match(color)
     assert HEX_RE.match(theme.CANVAS["background"])
 
 

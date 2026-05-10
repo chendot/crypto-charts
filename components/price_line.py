@@ -17,7 +17,7 @@ class PriceLine:
         ax.plot(
             dates,
             prices,
-            color=theme.COLORS["primary"],
+            color=theme.COLORS["data"]["primary"],
             linewidth=theme.STYLE["line_width"],
         )
         baseline = prices.min()
@@ -39,7 +39,7 @@ class PriceLine:
                 dates,
                 lower,
                 upper,
-                color=theme.COLORS["primary"],
+                color=theme.COLORS["data"]["primary"],
                 alpha=alpha_step * (step + 1),
                 linewidth=theme.STYLE["fill_line_width"],
             )
@@ -47,8 +47,8 @@ class PriceLine:
     def _annotate_extrema(self, ax: Axes, dates: pd.Series, prices: pd.Series) -> None:
         """Mark and label the highest and lowest prices in the visible series."""
         extrema = [
-            (prices.idxmax(), "High", theme.COLORS["accent"], theme.STYLE["high_annotation_offset"]),
-            (prices.idxmin(), "Low", theme.COLORS["down"], theme.STYLE["low_annotation_offset"]),
+            (prices.idxmax(), "High", theme.COLORS["data"]["accent"], theme.STYLE["high_annotation_offset"]),
+            (prices.idxmin(), "Low", theme.COLORS["data"]["down"], theme.STYLE["low_annotation_offset"]),
         ]
         for idx, label, color, offset in extrema:
             date = dates.loc[idx]
