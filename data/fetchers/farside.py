@@ -1,8 +1,9 @@
-"""Farside Investors fetcher for BTC spot ETF fund-flow data."""
+"""Source: Farside Investors; dataset: BTC spot ETF fund flows; update frequency: daily."""
 
 from __future__ import annotations
 
 from datetime import date
+from datetime import timedelta
 from pathlib import Path
 import re
 
@@ -11,6 +12,7 @@ import pandas as pd
 import requests
 
 from data.exceptions import DataFetchError
+from data.fetchers.base import BaseFetcher
 from data.schemas import ETF_FLOW_SCHEMA
 
 
@@ -37,6 +39,29 @@ ENTITY_BY_TICKER = {
     "GBTC": "Grayscale GBTC",
     "BTC": "Grayscale BTC",
 }
+
+
+class FarsideFetcher(BaseFetcher):
+    """Wrap the existing Farside BTC ETF flow logic in the BaseFetcher contract."""
+
+    source_id = "etf"
+    dataset_id = "farside_btc_flows"
+
+    def fetch_range(self, start: str, end: str) -> pd.DataFrame:
+        """Fetch Farside rows and return a timestamp-normalized DataFrame."""
+        days = max(1, (pd.Timestamp(end) - pd.Timestamp(start)).days + 1)
+        df = fetch_etf_flows(end_date=end, days=days, use_cache=True)
+        output_df = df.rename(columns={"date": "timestamp"}).copy()
+        output_df["timestamp"] = pd.to_datetime(output_df["timestamp"], utc=True).dt.tz_convert(None).dt.normalize()
+        return output_df[
+            (output_df["timestamp"] >= pd.Timestamp(start)) & (output_df["timestamp"] <= pd.Timestamp(end))
+        ].sort_values(["timestamp", "ticker"]).reset_index(drop=True)
+
+    def fetch_latest(self) -> pd.DataFrame:
+        """Fetch the latest roughly seven days of Farside ETF flows."""
+        end = date.today()
+        start = end - timedelta(days=7)
+        return self.fetch_range(start.isoformat(), end.isoformat())
 
 
 def fetch_etf_flows(end_date: str | None, days: int = 7, use_cache: bool = True) -> pd.DataFrame:

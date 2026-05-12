@@ -1,2 +1,1 @@
-"""Data access package for crypto market and DeFi metrics."""
-
+"""Source: local data package; dataset: all registered chart datasets; update frequency: daily."""

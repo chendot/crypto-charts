@@ -1,4 +1,4 @@
-"""Fetcher entrypoints for the seven long-running chart templates."""
+"""Source: fetcher registry; dataset: template fetcher entrypoints; update frequency: per template run."""
 
 from __future__ import annotations
 
