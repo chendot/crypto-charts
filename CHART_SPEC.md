@@ -197,3 +197,133 @@ After implementation, output the proposed tweet body in 3-paragraph structure
 - `docs/STRATEGY.md` — account positioning, master theme, content series taxonomy
 - `docs/观点库.md` — selection pool with metadata
 - `CHART_SPEC.md` — this file (visual + content production rules)
+
+## Design Rules  （从 config/theme.py DESIGN_RULES 提炼的执行标准）
+
+所有图表生成代码必须通过 `tests/test_design_rules.py`。违反以下任何规则，
+Codex 生成的代码不得提交。
+
+---
+
+### Rule 01 — Title = Thesis
+
+```
+标题是论点，不是描述。
+```
+
+| 项目 | 要求 |
+|------|------|
+| 字号 | `DESIGN_RULES["typography"]["title_size"]`（默认18pt），最小不低于 `DESIGN_RULES["title"]["min_font_size"]`（16pt） |
+| 长度 | ≤ 60 字符 |
+| 格式 | 必须是可被反驳的主张句。禁止以「对比图」「走势图」「数据」「图表」「overview」「chart」结尾 |
+
+**Codex 指令片段**：
+> 标题变量命名为 `CHART_TITLE`，内容必须是一个中文主张句（可被反驳的结论），
+> 不得以描述性词语结尾。字号引用 `DESIGN_RULES["typography"]["title_size"]`。
+
+---
+
+### Rule 02 — Color = Signal Only
+
+```
+颜色只分配给有语义的概念，不分配给序号。
+灰色处理其余一切。
+```
+
+| 元素 | 颜色规则 |
+|------|---------|
+| 主数据线 | `COLORS["series"]["a"]` 或指定颜色 |
+| 次要/对比数据线 | `COLORS["series"]["b"]` |
+| 参考线 / 标注竖线 | `color="white"` + `alpha=DESIGN_RULES["color"]["annotation_line_alpha"]`（0.30） |
+| 面积填充（主） | 主线色 + `alpha=DESIGN_RULES["color"]["fill_alpha_primary"]`（0.25） |
+| 面积填充（次） | 次线色 + `alpha=DESIGN_RULES["color"]["fill_alpha_secondary"]`（0.12） |
+| 格线 | `COLORS["base"]["grid"]` + `alpha=DESIGN_RULES["color"]["gridline_alpha"]`（0.18） |
+| 轴刻度标签 | `COLORS["text"]["muted"]` + `alpha=DESIGN_RULES["color"]["axis_label_alpha"]`（0.55） |
+| 单图最多有色 hue 数 | **3**，超过则重构配色 |
+
+**双轴图额外规则**：左轴刻度颜色 = 左侧数据线颜色；右轴刻度颜色 = 右侧数据线颜色。
+调用 `chart_utils._apply_dual_axis_colors(ax_left, ax_right, color_left, color_right)`。
+
+---
+
+### Rule 03 — Grid = Navigation, Not Decoration
+
+```
+格线帮读者对齐数值。多余的格线是噪音。
+```
+
+| 项目 | 要求 |
+|------|------|
+| 水平格线数量 | `ax.yaxis.set_major_locator(plt.MaxNLocator(DESIGN_RULES["grid"]["max_h_gridlines"]))` |
+| 垂直格线 | 默认关闭；仅在时间序列密度极高时可选开启，需注释说明原因 |
+| 格线样式 | `linestyle=DESIGN_RULES["grid"]["gridline_style"]`（`"--"`），`linewidth=DESIGN_RULES["grid"]["gridline_linewidth"]`（0.5） |
+| 格线颜色 | `COLORS["base"]["grid"]` |
+
+**Codex 指令片段**：
+> 调用 `ax.grid()` 时必须写 `axis="y"`，样式从 `DESIGN_RULES["grid"]` 取值。
+> 禁止写 `ax.grid(True)` 或不带参数的 `ax.grid()`。
+
+---
+
+### Rule 04 — Insight = Inference  （tweet copy 层，不在图上）
+
+```
+Insight box 已从图表画布永久移除。
+观点写在推文正文。正文必须包含推断框架，不得复述图表。
+```
+
+推文正文生成时（Codex 或手写）必须通过以下检查：
+
+- **禁止开头**：「可以看到」「图表显示」「数据表明」「从图中」「如图所示」
+- **必须包含**（至少其一）：「这意味着」「这说明」「这推翻了」「这暴露了」「这改变了」
+
+测试函数：`tests/test_design_rules.py::TestInsightFraming`
+
+---
+
+### Rule 05 — Whitespace = Precision
+
+```
+数据区域占画布约 65%。边距慷慨，不拥挤。
+```
+
+使用 `fig.subplots_adjust()` 应用以下值（从 `DESIGN_RULES["layout"]` 取）：
+
+```python
+fig.subplots_adjust(
+    left   = DESIGN_RULES["layout"]["margin_left"],    # 0.10
+    right  = 1 - DESIGN_RULES["layout"]["margin_right"],  # 0.90
+    top    = 1 - DESIGN_RULES["layout"]["margin_top"],    # 0.86
+    bottom = DESIGN_RULES["layout"]["margin_bottom"],  # 0.12
+)
+```
+
+图例位置：`ax.legend(bbox_to_anchor=(0.01, 0.99), loc="upper left", borderaxespad=0)`
+图例不得遮挡数据区域，`frameon=False`。
+
+---
+
+### Rule 06 — Typography Hierarchy
+
+```
+层级差必须视觉可感。字号比例 >= 1.5x（标题:副标题）。
+```
+
+引用 `DESIGN_RULES["typography"]`，所有字号必须从该字典取值，不得硬编码：
+
+```python
+T = DESIGN_RULES["typography"]
+
+ax.set_title(CHART_TITLE, fontsize=T["title_size"],   color=COLORS["text"]["primary"],   pad=14)
+ax.text(...)              # subtitle:  fontsize=T["subtitle_size"]
+ax.set_xlabel(...)        # axis label: fontsize=T["axis_label_size"]
+ax.tick_params(labelsize=T["tick_label_size"])
+
+# Annotation callouts: value larger than label
+# value text:  fontsize=T["annotation_value_size"]
+# label text:  fontsize=T["annotation_label_size"]
+```
+
+**测试保证**：`typography_valid()` 函数在 `config/theme.py` 中，
+`tests/test_design_rules.py::TestTypographyHierarchy::test_valid_hierarchy_passes` 会在
+每次 `DESIGN_RULES` 修改后自动验证比例一致性。
