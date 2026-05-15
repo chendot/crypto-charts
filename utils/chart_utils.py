@@ -214,6 +214,7 @@ def add_series_label(
         va="top",
         fontsize=TYPOGRAPHY["series_label"]["size"],
         fontweight=TYPOGRAPHY["series_label"]["weight"],
+        fontfamily=TYPOGRAPHY["font_family"],
         color=color,
         transform=fig.transFigure,
     )

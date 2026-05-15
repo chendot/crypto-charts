@@ -33,8 +33,21 @@ class BaseChart:
     def add_axes(self, rect: list[float]) -> plt.Axes:
         """Add a themed axes at a normalized figure rectangle."""
         ax = self.fig.add_axes(rect, facecolor=theme.COLORS["base"]["background"])
-        ax.tick_params(colors=theme.COLORS["text"]["muted"], labelsize=theme.TYPOGRAPHY["axis"]["size"])
-        ax.grid(True, color=theme.COLORS["base"]["grid"], linewidth=theme.STYLE["grid_line_width"])
+        ax.tick_params(
+            colors=theme.COLORS["text"]["muted"],
+            labelsize=theme.DESIGN_RULES["typography"]["tick_label_size"],
+        )
+        ax.yaxis.set_major_locator(
+            plt.MaxNLocator(theme.DESIGN_RULES["grid"]["max_h_gridlines"])
+        )
+        ax.grid(
+            axis="y",
+            linestyle=theme.DESIGN_RULES["grid"]["gridline_style"],
+            linewidth=theme.DESIGN_RULES["grid"]["gridline_linewidth"],
+            color=theme.COLORS["base"]["grid"],
+            alpha=theme.DESIGN_RULES["color"]["gridline_alpha"],
+        )
+        ax.grid(axis="x", visible=False)
         for spine in ax.spines.values():
             spine.set_color(theme.COLORS["base"]["grid"])
             spine.set_linewidth(theme.STYLE["spine_width"])
@@ -47,7 +60,7 @@ class BaseChart:
             theme.LAYOUT["title_y"],
             title,
             color=theme.COLORS["text"]["primary"],
-            fontsize=theme.TYPOGRAPHY["title"]["size"],
+            fontsize=theme.DESIGN_RULES["typography"]["title_size"],
             fontweight=theme.TYPOGRAPHY["title"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
             ha="left",
@@ -58,7 +71,7 @@ class BaseChart:
             theme.LAYOUT["subtitle_y"],
             subtitle,
             color=theme.COLORS["text"]["muted"],
-            fontsize=theme.TYPOGRAPHY["subtitle"]["size"],
+            fontsize=theme.DESIGN_RULES["typography"]["subtitle_size"],
             fontweight=theme.TYPOGRAPHY["subtitle"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
             ha="left",
@@ -70,29 +83,30 @@ class BaseChart:
         self.fig.text(
             *theme.WATERMARK["position"],
             theme.WATERMARK["text"],
-            color=theme.COLORS["text"]["hint"],
-            fontsize=theme.TYPOGRAPHY["watermark"]["size"],
+            color=theme.COLORS["text"]["footer"],
+            fontsize=theme.DESIGN_RULES["typography"]["footer_size"],
             fontweight=theme.TYPOGRAPHY["watermark"]["weight"],
-            fontfamily=theme.TYPOGRAPHY["font_family"],
+            fontfamily=theme.TYPOGRAPHY["font_family_mono"],
             ha=theme.WATERMARK["ha"],
             va=theme.WATERMARK["va"],
         )
 
-    def add_source(self, source_text: str) -> None:
+    def add_source(self, source_text: str, *, position: tuple[float, float] | None = None) -> None:
         """Add source attribution to the lower-left corner."""
+        x, y = position or (theme.LAYOUT["source_x"], theme.LAYOUT["source_y"])
         self.fig.text(
-            theme.LAYOUT["source_x"],
-            theme.LAYOUT["source_y"],
+            x,
+            y,
             source_text,
             color=theme.COLORS["text"]["hint"],
-            fontsize=theme.TYPOGRAPHY["annotation"]["size"],
+            fontsize=theme.DESIGN_RULES["typography"]["footer_size"],
             fontweight=theme.TYPOGRAPHY["annotation"]["weight"],
             fontfamily=theme.TYPOGRAPHY["font_family"],
             ha="left",
             va="bottom",
         )
 
-    def save(self, filename: str) -> Path:
+    def save(self, filename: str, *, bbox_inches: str | None = None) -> Path:
         """Save the chart image under the configured output directory."""
         theme.OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         output_path = theme.OUTPUT_DIR / filename
@@ -100,7 +114,7 @@ class BaseChart:
             output_path,
             dpi=theme.CANVAS["dpi"],
             facecolor=self.fig.get_facecolor(),
-            bbox_inches=None,
+            bbox_inches=bbox_inches,
         )
         plt.close(self.fig)
         return output_path

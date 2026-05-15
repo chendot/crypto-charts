@@ -83,11 +83,12 @@ COLORS = {
         "A_lp": "#C4A8FF",             # LP yield illusion (light violet, avoids etf.arkb collision)
         "B_yield": "#F4A261",          # Yield decomposition (warm amber)
         "E_risk": "#E76F51",           # Risk structure (warning coral)
+        "F_ranking": "#6B84B8",         # Ranking illusion (muted; no auxiliary hue)
     },
 }
 
 TYPOGRAPHY = {
-    "font_family": "DejaVu Sans",
+    "font_family": "Hiragino Sans GB",
     "font_family_mono": "Menlo",      # Monospace for footer @koalada18 (fallback: JetBrains Mono, IBM Plex Mono)
     "title": {"size": 22, "weight": "bold"},
     "subtitle": {"size": 11, "weight": "normal"},
@@ -247,7 +248,7 @@ CONTENT_SERIES = {
     },
     "F_ranking": {
         "label": "榜单幻觉",
-        "color": COLORS["text"]["muted"],
+        "color": COLORS["content_series"]["F_ranking"],
         "use_color": False,
     },
     "X_macro": {
@@ -255,6 +256,58 @@ CONTENT_SERIES = {
         "color": COLORS["text"]["muted"],
         "use_color": False,
     },
+}
+
+PERP_DEX_SCATTER = {
+    "xlim": (20, 250),
+    "ylim": (0.1, 12),
+    "x_ticks": (20, 40, 60, 100, 180),
+    "y_ticks": (0.1, 0.2, 0.5, 1, 2, 5, 10),
+    "reference_points": ((20, 0.6), (200, 6.0)),
+    "reference_alpha": 0.50,
+    "reference_label_offset": (-2, 6),
+    "tick_label_zorder": 10,
+    "x_tick_label_y": 0.04,
+    "x_label_pad": 4,
+    "marker_sizes": {
+        "featured": 120,
+        "default": 80,
+    },
+    "annotation_offsets": {
+        "Hyperliquid": (8, 6),
+        "Aster": (8, 0),
+        "edgeX": (12, -4),
+        "Lighter": (8, 8),
+        "Grvt": (-18, -2),
+        "ApeX": (8, -18),
+    },
+    "annotation_line_gap": -10,
+    "source_position": (0.06, 0.015),
+}
+
+PERP_DEX_RANKING = {
+    "xlim": (0, 5.5),
+    "bar_height": 0.45,
+    "reference_value": 3.17,
+    "reference_alpha": 0.40,
+    "value_offset": 0.05,
+    "rank_change_offset": 0.42,
+    "reference_label_offset": (0, -4),
+    "reference_label_y_offset": -0.4,
+    "top_padding": 0.85,
+    "label_name_x": -0.075,
+    "label_rank_x": -0.005,
+    "break_x": 5.3,
+    "break_linewidth": 1.5,
+    "break_slash_dx": 0.025,
+    "break_slash_dy": 0.10,
+    "break_slash_gap": 0.06,
+    "hyperliquid_display_value": 5.5,
+    "hyperliquid_value_x": 5.58,
+    "hyperliquid_rank_change_x": 6.00,
+    "hyperliquid_note_x": 5.35,
+    "hyperliquid_note_y_offset": -0.36,
+    "source_position": PERP_DEX_SCATTER["source_position"],
 }
 
 ETF_FLOW = {
